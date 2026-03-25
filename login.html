@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - eSwasthya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-notes-medical"></i> eSwasthya
+        </a>
+        <div class="nav-controls">
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Dark Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <main class="auth-container">
+        <div class="card auth-card">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Please log in securely to access records.</p>
+            </div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-role="patient" onclick="activateLoginTab('patient')">
+                    Patient Login
+                </div>
+                <div class="auth-tab" data-role="doctor" onclick="activateLoginTab('doctor')">
+                    Doctor Login
+                </div>
+            </div>
+            <!-- Patient Form -->
+            <form id="form-patient" onsubmit="event.preventDefault();" style="display: block;">
+                <div class="form-group">
+                    <label class="form-label" for="patient-phone">Phone Number</label>
+                    <input type="tel" id="patient-phone" class="form-control" placeholder="10-digit Mobile Number" required pattern="[0-9]{10}">
+                </div>
+                <button type="button" id="btn-send-otp" class="btn btn-primary btn-large">
+                    Send OTP <i class="fa-solid fa-paper-plane"></i>
+                </button>
+                <div class="form-group" id="otp-group" style="display: none; margin-top: 1rem;">
+                    <label class="form-label" for="patient-otp">Enter OTP</label>
+                    <input type="number" id="patient-otp" class="form-control" placeholder="4-digit OTP" pattern="[0-9]{4}">
+                </div>
+                <button type="button" id="btn-verify-otp" class="btn btn-primary btn-large" style="display: none; margin-top: 1rem;">
+                    Verify and Login <i class="fa-solid fa-check-circle"></i>
+                </button>
+            </form>
+            <!-- Doctor Form -->
+            <form id="form-doctor" onsubmit="event.preventDefault();" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label" for="doc-email">Email Address</label>
+                    <input type="email" id="doc-email" class="form-control" placeholder="doctor@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="doc-pass">Password</label>
+                    <input type="password" id="doc-pass" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label class="form-label" for="doc-cert">Degree Certificate (PDF/Image)</label>
+                    <input type="file" id="doc-cert" class="form-control" accept=".pdf,image/*">
+                    <small style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.25rem; display: block;">Required for first-time verification. Pending status will be shown inside.</small>
+                </div>
+                <button type="button" id="btn-doc-login" class="btn btn-primary btn-large" style="margin-top: 1.5rem;">
+                    Login / Register <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

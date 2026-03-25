@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSwasthya - Migrant Healthcare System</title>
+    <meta name="description" content="A simple, secure platform for migrant workers and doctors to manage health history and medical care.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-notes-medical"></i> eSwasthya
+        </div>
+        <div class="nav-controls">
+            <select id="language-select" class="lang-select" aria-label="Select Language">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="bn">বাংলা (Bengali)</option>
+            </select>
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Dark Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </header>
+    <main class="hero-section">
+        <div class="hero-content">
+            <h1>Your health records, accessible anywhere, anytime.</h1>
+            <p>A simple, secure, and mobile-friendly platform for migrant workers and doctors to manage health history, medications, and medical care.</p>
+            
+            <div class="role-selection">
+                <a href="login.html?role=patient" class="btn btn-primary btn-large">
+                    <i class="fa-solid fa-user-injured"></i> I am a Patient
+                </a>
+                <a href="login.html?role=doctor" class="btn btn-secondary btn-large">
+                    <i class="fa-solid fa-user-doctor"></i> I am a Doctor
+                </a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=600" alt="Healthcare professionals taking care of patients in a modern hospital setting">
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

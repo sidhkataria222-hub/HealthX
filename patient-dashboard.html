@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - eSwasthya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-container {
+            padding: 2rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            min-height: calc(100vh - 80px);
+            align-items: start;
+        }
+        .status-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            box-shadow: var(--shadow);
+        }
+        .history-list, .medication-list, .blog-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .history-item {
+            padding: 1rem;
+            border-left: 4px solid var(--primary);
+            background: var(--bg-light);
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+        .med-card {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .blog-card {
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .blog-card:hover { background: var(--bg-light); border-color: var(--primary); }
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-notes-medical"></i> eSwasthya
+        </a>
+        <div class="nav-controls">
+            <span id="user-greeting" style="font-weight: 600; display: none;"></span>
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Dark Mode">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+            <button class="btn btn-outline" onclick="logout()" style="padding: 0.5rem 1rem;">Logout <i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+    </header>
+    <main class="dashboard-container">
+        <!-- Main Content Area -->
+        <div class="dashboard-main" style="display: flex; flex-direction: column; gap: 2rem;">
+            
+            <!-- Health Status -->
+            <section class="card" id="health-status-card" style="border-top: 5px solid var(--border);">
+                <h3>Current Health Status</h3>
+                <div class="status-header">
+                    <div id="status-icon" class="status-icon" style="background: var(--border);">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 1.5rem; margin-bottom: 0.25rem;" id="health-condition-text">Loading...</h4>
+                        <p style="font-size: 1.1rem;">BMI: <strong id="patient-bmi" style="color: var(--text-main);">--</strong> &nbsp;|&nbsp; Last Checkup: <strong id="patient-last-visit" style="color: var(--text-main);">--</strong></p>
+                    </div>
+                </div>
+            </section>
+            <!-- Grid for History & Meds -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                
+                <!-- Medical History -->
+                <section class="card">
+                    <h3><i class="fa-solid fa-file-medical" style="color: var(--primary);"></i> Medical History</h3>
+                    <ul class="history-list" id="medical-history-list">
+                        <!-- JS renders here -->
+                        <p class="form-label" style="margin-top: 1rem;">No history found.</p>
+                    </ul>
+                </section>
+                <!-- Current Medications -->
+                <section class="card">
+                    <h3><i class="fa-solid fa-capsules" style="color: var(--warning);"></i> Current Medications</h3>
+                    <div class="medication-list" id="medications-list">
+                        <!-- JS renders here -->
+                        <p class="form-label" style="margin-top: 1rem;">No active medications.</p>
+                    </div>
+                </section>
+            </div>
+            <!-- Disease Checker -->
+            <section class="card">
+                <h3><i class="fa-solid fa-stethoscope" style="color: var(--primary);"></i> Symptom Disease Checker</h3>
+                <p style="margin-bottom: 1.5rem; margin-top: 0.5rem;">Enter your symptoms to get a quick preliminary check. (AI Mockup)</p>
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <input type="text" id="symptom-input" class="form-control" placeholder="e.g. Fever, Cough, Chest Pain">
+                    <button class="btn btn-primary" onclick="checkSymptoms()" style="min-width: 120px;">Diagnose <i class="fa-solid fa-microscope"></i></button>
+                </div>
+                <div id="symptom-result" style="display: none; padding: 1.5rem; background: var(--bg-light); border-radius: var(--radius); margin-top: 1rem; border: 1px solid var(--border);">
+                    <!-- JS renders here -->
+                </div>
+            </section>
+        </div>
+        <!-- Sidebar Area -->
+        <div class="dashboard-sidebar" style="display: flex; flex-direction: column; gap: 2rem;">
+            
+            <!-- Emergency Call -->
+            <a href="tel:108" class="btn btn-danger btn-large" style="display: flex; flex-direction: column; padding: 2.5rem 1rem; text-align: center; border-radius: var(--radius-lg);">
+                <i class="fa-solid fa-phone-volume" style="font-size: 3rem; margin-bottom: 1rem; animation: pulse 2s infinite;"></i>
+                <span style="font-size: 1.5rem; font-weight: 700;">Call Ambulance</span>
+                <span style="font-size: 1rem; font-weight: 400; opacity: 0.9; margin-top: 0.5rem;">Toll Free: 108</span>
+            </a>
+            <!-- Nearby Hospitals -->
+            <section class="card">
+                <h3><i class="fa-solid fa-hospital" style="color: var(--primary);"></i> Nearby Hospitals</h3>
+                <div style="margin-top: 1rem;">
+                    <button class="btn btn-outline" style="width: 100%; margin-bottom: 1rem;" onclick="findHospitals()">
+                        <i class="fa-solid fa-location-crosshairs"></i> Find Hospitals Near Me
+                    </button>
+                    <ul class="history-list" id="hospital-list">
+                        <li class="history-item" style="border-left-color: var(--success);">
+                            <div style="font-weight: 600; color: var(--text-main);">City General Hospital</div>
+                            <small>2.1 km away • <a href="#" style="color: var(--primary);">Directions</a></small>
+                        </li>
+                        <li class="history-item" style="border-left-color: var(--warning);">
+                            <div style="font-weight: 600; color: var(--text-main);">Swasthya Clinic</div>
+                            <small>4.5 km away • <a href="#" style="color: var(--primary);">Directions</a></small>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <!-- Health Blogs -->
+            <section class="card">
+                <h3><i class="fa-solid fa-book-medical" style="color: var(--primary);"></i> Health Tips</h3>
+                <div class="blog-list" id="blogs-list">
+                    <!-- JS renders here -->
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userId = sessionStorage.getItem('active_user_id');
+            const type = sessionStorage.getItem('active_user_type');
+            
+            if(!userId || type !== 'patient') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            renderPatientDashboard(userId);
+        });
+        function logout() {
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+        }
+        function checkSymptoms() {
+            const input = document.getElementById('symptom-input').value.toLowerCase();
+            const res = document.getElementById('symptom-result');
+            
+            if(!input) {
+                res.style.display = 'none';
+                return;
+            }
+            res.style.display = 'block';
+            
+            // Artificial delay for realism
+            res.innerHTML = '<div style="text-align:center;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i><p style="margin-top: 1rem;">Analyzing symptoms...</p></div>';
+            
+            setTimeout(() => {
+                let reportHTML = '';
+                if(input.includes('chest') || input.includes('breath') || input.includes('faint')) {
+                    reportHTML = `
+                        <h4 style="color: var(--danger); font-size: 1.25rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-radiation"></i> Critical Condition</h4>
+                        <p style="color: var(--text-main); font-weight: 500;">Possible diseases: Heart Attack, Asthma Attack, or Severe Allergic Reaction</p>
+                        <div class="badge badge-danger" style="margin-top: 1rem; font-size: 1rem; padding: 0.5rem 1rem;">Action: Emergency care required immediately.</div>
+                    `;
+                } else if(input.includes('fever') || input.includes('cough') || input.includes('cold')) {
+                    reportHTML = `
+                        <h4 style="color: var(--warning); font-size: 1.25rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> Moderate Condition</h4>
+                        <p style="color: var(--text-main); font-weight: 500;">Possible diseases: Viral Fever, Flu, or Common Cold</p>
+                        <div class="badge badge-warning" style="margin-top: 1rem; font-size: 1rem; padding: 0.5rem 1rem;">Action: See a doctor if symptoms persist for 3+ days. Hydrate well.</div>
+                    `;
+                } else {
+                    reportHTML = `
+                        <h4 style="color: var(--success); font-size: 1.25rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-house-medical"></i> Mild Symptoms</h4>
+                        <p style="color: var(--text-main); font-weight: 500;">Possible cause: Fatigue, Overwork, or Minor Infection</p>
+                        <div class="badge badge-success" style="margin-top: 1rem; font-size: 1rem; padding: 0.5rem 1rem;">Action: Practice home care and get sufficient rest.</div>
+                    `;
+                }
+                res.innerHTML = reportHTML;
+            }, 1000);
+        }
+        function findHospitals() {
+            alert('Location permission requested.\nDemo: Showing default nearby hospitals.');
+        }
+    </script>
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</body>
+</html>
